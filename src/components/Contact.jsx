@@ -1,28 +1,40 @@
-import { useState } from "react";
-import { CONTACT } from "../constants";
-import { motion } from "framer-motion";
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import emailjs from '@emailjs/browser';
+import { CONTACT } from '../constants';
 
 const Contact = () => {
-  
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    message: "",
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
   });
+  const [statusMessage, setStatusMessage] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic here (e.g., sending an email)
-    console.log("Form submitted:", form);
-    // Reset form after submission
-    setForm({ name: "", email: "", message: "" });
+    emailjs.send(
+      'service_e96tvol',
+      'template_n416oew',
+      formData,
+      'FsdfXqyWTwi5In5UP'
+    )
+    .then((response) => {
+      console.log('SUCCESS!', response.status, response.text);
+      setStatusMessage('Message sent successfully!');
+      setFormData({ name: '', email: '', message: '' });
+      setIsSubmitted(true);
+    }, (error) => {
+      console.error('FAILED...', error);
+      setStatusMessage('Failed to send the message. Please try again.');
+      setIsSubmitted(true);
+    });
   };
 
   return (
@@ -51,80 +63,65 @@ const Contact = () => {
           transition={{ duration: 1 }}
           className="my-4"
         >
-          <a href={`tel:${CONTACT.phoneNo}`} className="hover:underline">
+          <a href={`tel:${CONTACT.phoneNo.replace(/ /g, '')}`} className="hover:underline">
             {CONTACT.phoneNo}
           </a>
         </motion.p>
-        <motion.a
-          whileInView={{ opacity: 1, x: 0 }}
+        <motion.a 
+        whileInView={{ opacity: 1, x: 0 }}
           initial={{ opacity: 0, x: 100 }}
           transition={{ duration: 1 }}
-          href={`mailto:${CONTACT.email}`}
-          className="border-b hover:underline"
-        >
+          href={`mailto:${CONTACT.email}`} className="hover:underline">
           {CONTACT.email}
         </motion.a>
       </div>
-      <div className="max-w-md mx-auto mt-10 bg-gray-800 p-6 rounded-lg shadow-lg">
-        <motion.form
-          whileInView={{ opacity: 1, scale: 1 }}
-          initial={{ opacity: 0, scale: 0.9 }}
-          transition={{ duration: 0.5 }}
-          onSubmit={handleSubmit}
-          className="space-y-6"
+      <form onSubmit={handleSubmit} className="mt-8 mx-auto max-w-lg bg-gray-800 p-8 rounded-lg">
+        <div className="mb-4">
+          <label htmlFor="name" className="block text-white">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg p-2 mt-1"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="email" className="block text-white">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg p-2 mt-1"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="message" className="block text-white">Message</label>
+          <textarea
+            id="message"
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            required
+            rows="4"
+            className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg p-2 mt-1"
+          />
+        </div>
+        <button
+          type="submit"
+          className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition-colors duration-300"
         >
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-white">
-              Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              value={form.name}
-              onChange={handleChange}
-              required
-              className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg p-2 mt-1"
-            />
-          </div>
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-white">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              value={form.email}
-              onChange={handleChange}
-              required
-              className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg p-2 mt-1"
-            />
-          </div>
-          <div>
-            <label htmlFor="message" className="block text-sm font-medium text-white">
-              Message
-            </label>
-            <textarea
-              name="message"
-              id="message"
-              value={form.message}
-              onChange={handleChange}
-              required
-              className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg p-2 mt-1"
-              rows="4"
-            ></textarea>
-          </div>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-lg"
-          >
-            Send Message
-          </motion.button>
-        </motion.form>
-      </div>
+          Send Message
+        </button>
+        {isSubmitted && (
+          <p className="mt-4 text-center text-white">{statusMessage}</p>
+        )}
+      </form>
     </div>
     </div>
   );
