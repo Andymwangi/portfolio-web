@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import { CONTACT } from '../constants';
+import { FaPhoneAlt, FaEnvelope, FaGithub, FaLinkedin } from 'react-icons/fa';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -38,7 +39,6 @@ const Contact = () => {
   };
 
   return (
-    <div id="contact" className="contact-section">
     <div className="border-b border-neutral-900 pb-20">
       <motion.h2
         whileInView={{ opacity: 1, y: 0 }}
@@ -53,27 +53,44 @@ const Contact = () => {
           whileInView={{ opacity: 1, x: 0 }}
           initial={{ opacity: 0, x: -100 }}
           transition={{ duration: 1 }}
-          className="my-4"
+          className="my-4 flex justify-center items-center"
         >
-          {CONTACT.address}
+          <FaPhoneAlt className="mr-2" />{' '}
+          <a href={`tel:${CONTACT.phoneNo.replace(/ /g, '')}`} className="hover:underline">
+            {CONTACT.phoneNo}
+          </a>
         </motion.p>
         <motion.p
           whileInView={{ opacity: 1, x: 0 }}
           initial={{ opacity: 0, x: 100 }}
           transition={{ duration: 1 }}
-          className="my-4"
+          className="my-4 flex justify-center items-center"
         >
-          <a href={`tel:${CONTACT.phoneNo.replace(/ /g, '')}`} className="hover:underline">
-            {CONTACT.phoneNo}
+          <FaEnvelope className="mr-2" />{' '}
+          <a href={`mailto:${CONTACT.email}`} className="hover:underline">
+            {CONTACT.email}
           </a>
         </motion.p>
-        <motion.a 
-        whileInView={{ opacity: 1, x: 0 }}
-          initial={{ opacity: 0, x: 100 }}
-          transition={{ duration: 1 }}
-          href={`mailto:${CONTACT.email}`} className="hover:underline">
-          {CONTACT.email}
-        </motion.a>
+        <div className="my-8 flex justify-center space-x-4">
+          <motion.a
+            href="https://github.com/Andymwangi"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.1 }}
+            className="text-2xl"
+          >
+            <FaGithub />
+          </motion.a>
+          <motion.a
+            href="https://www.linkedin.com/in/anderson-mwangi/"
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.1 }}
+            className="text-2xl"
+          >
+            <FaLinkedin />
+          </motion.a>
+        </div>
       </div>
       <form onSubmit={handleSubmit} className="mt-8 mx-auto max-w-lg bg-gray-800 p-8 rounded-lg">
         <div className="mb-4">
@@ -85,7 +102,8 @@ const Contact = () => {
             value={formData.name}
             onChange={handleChange}
             required
-            className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg p-2 mt-1"
+            className="w-full mt-2 p-2 rounded-md"
+            style={{ backgroundColor: '#4B5563', color: '#FFF' }}
           />
         </div>
         <div className="mb-4">
@@ -97,7 +115,8 @@ const Contact = () => {
             value={formData.email}
             onChange={handleChange}
             required
-            className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg p-2 mt-1"
+            className="w-full mt-2 p-2 rounded-md"
+            style={{ backgroundColor: '#4B5563', color: '#FFF' }}
           />
         </div>
         <div className="mb-4">
@@ -109,7 +128,8 @@ const Contact = () => {
             onChange={handleChange}
             required
             rows="4"
-            className="w-full border border-gray-600 bg-gray-700 text-white rounded-lg p-2 mt-1"
+            className="w-full mt-2 p-2 rounded-md"
+            style={{ backgroundColor: '#4B5563', color: '#FFF' }}
           />
         </div>
         <button
@@ -122,7 +142,6 @@ const Contact = () => {
           <p className="mt-4 text-center text-white">{statusMessage}</p>
         )}
       </form>
-    </div>
     </div>
   );
 };
