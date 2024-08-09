@@ -1,7 +1,7 @@
 import aboutImg from "../assets/about.jpg";
 import { ABOUT_TEXT } from "../constants";
 import { motion } from "framer-motion";
-import resumeFile from "../assets/AndersonResume.pdf"; 
+import resumeFile from "../assets/Anderson Mwangi Resume.pdf"; 
 
 const About = () => {
   return (

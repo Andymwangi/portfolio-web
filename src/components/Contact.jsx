@@ -39,7 +39,6 @@ const Contact = () => {
   };
 
   return (
-    <div id="contact" className="contact-section">
     <div className="border-b border-neutral-900 pb-20">
       <motion.h2
         whileInView={{ opacity: 1, y: 0 }}
@@ -143,7 +142,6 @@ const Contact = () => {
           <p className="mt-4 text-center text-white">{statusMessage}</p>
         )}
       </form>
-    </div>
     </div>
   );
 };
